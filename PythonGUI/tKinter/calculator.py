@@ -79,6 +79,11 @@ def button_ten_raised_to():
     e.delete(0, END)
     e.insert(0, pow(10, f_num))
 
+# TODO: fiks
+def button_comma():
+    number = e.get()
+    e.insert(0, number + ",")
+
 
 # Definer knapper
 # TODO: Prøv en løkke i stedet
@@ -96,6 +101,7 @@ button_0 = Button(root, text="0", padx=40, pady=20, command=lambda: button_click
 
 button_equal = Button(root, text="=", padx=87, pady=20, command=button_equal)
 button_clear = Button(root, text="clear", padx=79, pady=20, command=button_clear)
+button_comma = Button(root, text=", ", padx=48, pady=20, command=button_clear)
 
 button_subtract = Button(root, text="-", padx=41, pady=20, command=button_subtract)
 button_multiply = Button(root, text="*", padx=41, pady=20, command=button_multiply)
@@ -122,6 +128,7 @@ button_9.grid(row=1, column=2)
 button_0.grid(row=4, column=0)
 button_clear.grid(row=6, column=1, columnspan=2)
 button_equal.grid(row=4, column=1, columnspan=2)
+button_comma.grid(row=3, column=3)
 
 button_add.grid(row=5, column=0)
 button_subtract.grid(row=5, column=1)
