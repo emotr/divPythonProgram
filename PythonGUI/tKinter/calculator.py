@@ -4,8 +4,8 @@ import numpy as np
 root = Tk()
 root.title("Enkel kalkulator") # Setter på en tittel på vinduet
 
-e = Entry(root, width=35, borderwidth=5)
-e.grid(row=0, column=0, columnspan=3, padx=10, pady=10) 
+e = Entry(root, width=50, borderwidth=5, bg="#dcdcdc")
+e.grid(row=0, column=0, columnspan=4, padx=10, pady=10) 
 
 def button_click(number):
     current = e.get()
@@ -34,7 +34,10 @@ def button_equal():
     if math == "multiplication":
         e.insert(0, f_num * int(second_number))
     if math == "division":
-        e.insert(0, f_num / int(second_number))
+        if second_number == 0:
+            e.insert(0, "Kan ikke dele på 0")
+        else:
+            e.insert(0, f_num / int(second_number))
 
 def button_subtract():
     first_number = e.get()
@@ -63,11 +66,18 @@ def button_divide():
 def button_square_root():
     first_number = e.get()
     global f_num
-    global math
-    math = "square root"
     f_num = int(first_number)
     e.delete(0, END)
-    e.insert(0, np.sqrt(f_num))
+    if f_num < 0:
+        e.insert(0, "Kan ikke ta kvadratrot av et negativt tall")
+    else:    
+        e.insert(0, np.sqrt(f_num))
+
+def button_ten_raised_to():
+    number = e.get() 
+    f_num = int(number)
+    e.delete(0, END)
+    e.insert(0, pow(10, f_num))
 
 
 # Definer knapper
@@ -84,15 +94,16 @@ button_8 = Button(root, text="8", padx=40, pady=20, command=lambda: button_click
 button_9 = Button(root, text="9", padx=40, pady=20, command=lambda: button_click(9))
 button_0 = Button(root, text="0", padx=40, pady=20, command=lambda: button_click(0))
 
-button_add = Button(root, text="+", padx=39, pady=20, command=button_add)
 button_equal = Button(root, text="=", padx=87, pady=20, command=button_equal)
-button_clear = Button(root, text="Clear", padx=77, pady=20, command=button_clear)
+button_clear = Button(root, text="clear", padx=79, pady=20, command=button_clear)
 
 button_subtract = Button(root, text="-", padx=41, pady=20, command=button_subtract)
-button_multiply = Button(root, text="*", padx=40, pady=20, command=button_multiply)
+button_multiply = Button(root, text="*", padx=41, pady=20, command=button_multiply)
 button_divide = Button(root, text="/", padx=40, pady=20, command=button_divide)
+button_add = Button(root, text="+", padx=39, pady=20, command=button_add)
 
-button_square_root = Button(root, text="Square root", padx=20, pady=20, command=button_square_root)
+button_square_root = Button(root, text="square root", padx=21, pady=20, command=button_square_root)
+button_ten_raised_to = Button(root, text="10^x", padx=38, pady=20, command=button_ten_raised_to)
 
 # Sett knappene på skjermen
 
@@ -110,13 +121,14 @@ button_9.grid(row=1, column=2)
 
 button_0.grid(row=4, column=0)
 button_clear.grid(row=6, column=1, columnspan=2)
-button_add.grid(row=5, column=0)
 button_equal.grid(row=4, column=1, columnspan=2)
 
+button_add.grid(row=5, column=0)
 button_subtract.grid(row=5, column=1)
 button_multiply.grid(row=5, column=2)
 button_divide.grid(row=6, column=0)
 button_square_root.grid(row=1, column=3, columnspan=1)
+button_ten_raised_to.grid(row=2, column=3)
 
 
 root.mainloop()
