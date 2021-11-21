@@ -1,5 +1,4 @@
 from tkinter import *
-import numpy as np
 
 root = Tk()
 root.title("Enkel kalkulator") # Setter på en tittel på vinduet
@@ -71,7 +70,7 @@ def button_square_root():
     if f_num < 0:
         e.insert(0, "Kan ikke ta kvadratrot av et negativt tall")
     else:    
-        e.insert(0, np.sqrt(f_num))
+        e.insert(0, int(pow(f_num, 1/2)))
 
 def button_ten_raised_to():
     number = e.get() 
