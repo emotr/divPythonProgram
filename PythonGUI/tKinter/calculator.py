@@ -23,7 +23,7 @@ def button_add():
     global f_num
     global math
     math = "addition"
-    f_num = int(first_number) 
+    f_num = float(first_number) 
     e.delete(0, END)
 
 # Likhetstegn. Basert på hva som skal regnes ut
@@ -32,16 +32,16 @@ def button_equal():
     e.delete(0, END)
 
     if math == "addition":
-        e.insert(0, f_num + int(second_number))
+        e.insert(0, f_num + float(second_number))
     if math == "subtraction":
-        e.insert(0, f_num - int(second_number))
+        e.insert(0, f_num - float(second_number))
     if math == "multiplication":
-        e.insert(0, f_num * int(second_number))
+        e.insert(0, f_num * float(second_number))
     if math == "division":
         if second_number == 0:
             e.insert(0, "Kan ikke dele på 0")
         else:
-            e.insert(0, f_num / int(second_number))
+            e.insert(0, f_num / float(second_number))
 
 # Subtraherer
 def button_subtract():
@@ -49,7 +49,7 @@ def button_subtract():
     global f_num
     global math
     math = "subtraction"
-    f_num = int(first_number) 
+    f_num = float(first_number) 
     e.delete(0, END)
 
 # Multipliserer
@@ -58,7 +58,7 @@ def button_multiply():
     global f_num
     global math
     math = "multiplication"
-    f_num = int(first_number) 
+    f_num = float(first_number) 
     e.delete(0, END)
 
 # Dividerer
@@ -67,7 +67,7 @@ def button_divide():
     global f_num
     global math
     math = "division"
-    f_num = int(first_number) 
+    f_num = float(first_number) 
     e.delete(0, END)
 
 # Tar kvadratrot av et tall
@@ -79,12 +79,12 @@ def button_square_root():
     if f_num < 0:
         e.insert(0, "Kan ikke ta kvadratrot av et negativt tall")
     else:    
-        e.insert(0, int(pow(f_num, 1/2)))
+        e.insert(0, float(pow(f_num, 1/2)))
 
 # Setter 10 ^ inputet tall. Feks input 2 gir 10^2
 def button_ten_raised_to():
     number = e.get() 
-    f_num = int(number)
+    f_num = float(number)
     e.delete(0, END)
     e.insert(0, pow(10, f_num))
 
@@ -92,7 +92,8 @@ def button_ten_raised_to():
 # Legger til et komma så man kan bruke flyttall
 def button_comma():
     number = e.get()
-    e.insert(0, number + int(","))
+    e.delete(0, END)
+    e.insert(0, float(number))
 
 def first_parentheses():
     return
@@ -104,7 +105,7 @@ def second_parentheses():
 def button_negative():
     number = e.get()
     e.delete(0, END)
-    number = int(number)
+    number = float(number)
     e.insert(0, (number * -1))
 
 
@@ -165,6 +166,5 @@ button_multiply.grid(row=5, column=2)
 button_divide.grid(row=6, column=0)
 button_square_root.grid(row=1, column=3, columnspan=1)
 button_ten_raised_to.grid(row=2, column=3)
-
 
 root.mainloop()
