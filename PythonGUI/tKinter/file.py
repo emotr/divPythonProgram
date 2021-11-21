@@ -11,8 +11,8 @@ root.iconbitmap("images/1829007.ico")
 def open():
     global my_img
     root.filename = filedialog.askopenfilename(
-    initialdir="C:/Users/emotr/Desktop/divProgrammering/divPythonProgram/PythonGUI/tKinter/images", 
-    title="Select A File", filetypes=(("jpg files", "*.jpg"), ("png files", "*.png")))
+        initialdir="C:/Users/emotr/Desktop/divProgrammering/divPythonProgram/PythonGUI/tKinter/images", 
+        title="Select A File", filetypes=(("jpg files", "*.jpg"), ("png files", "*.png")))
 
     myLabel = Label(root, text=root.filename).pack()
 
