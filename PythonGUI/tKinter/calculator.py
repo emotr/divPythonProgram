@@ -3,17 +3,21 @@ from tkinter import *
 root = Tk()
 root.title("Enkel kalkulator") # Setter på en tittel på vinduet
 
+# Input feltet
 e = Entry(root, width=50, borderwidth=5, bg="#dcdcdc")
 e.grid(row=0, column=0, columnspan=4, padx=10, pady=10) 
 
+# Lar bruker skrive inn tall med knapper
 def button_click(number):
     current = e.get()
     e.delete(0, END)
     e.insert(0, str(current) + str(number))
 
+# Fjerner input
 def button_clear():
     e.delete(0, END)
 
+# Addisjon
 def button_add():
     first_number = e.get()
     global f_num
@@ -22,6 +26,7 @@ def button_add():
     f_num = int(first_number) 
     e.delete(0, END)
 
+# Likhetstegn. Basert på hva som skal regnes ut
 def button_equal():
     second_number = e.get()
     e.delete(0, END)
@@ -38,6 +43,7 @@ def button_equal():
         else:
             e.insert(0, f_num / int(second_number))
 
+# Subtraherer
 def button_subtract():
     first_number = e.get()
     global f_num
@@ -46,6 +52,7 @@ def button_subtract():
     f_num = int(first_number) 
     e.delete(0, END)
 
+# Multipliserer
 def button_multiply():
     first_number = e.get()
     global f_num
@@ -54,6 +61,7 @@ def button_multiply():
     f_num = int(first_number) 
     e.delete(0, END)
 
+# Dividerer
 def button_divide():
     first_number = e.get()
     global f_num
@@ -62,6 +70,7 @@ def button_divide():
     f_num = int(first_number) 
     e.delete(0, END)
 
+# Tar kvadratrot av et tall
 def button_square_root():
     first_number = e.get()
     global f_num
@@ -72,6 +81,7 @@ def button_square_root():
     else:    
         e.insert(0, int(pow(f_num, 1/2)))
 
+# Setter 10 ^ inputet tall. Feks input 2 gir 10^2
 def button_ten_raised_to():
     number = e.get() 
     f_num = int(number)
@@ -79,13 +89,26 @@ def button_ten_raised_to():
     e.insert(0, pow(10, f_num))
 
 # TODO: fiks
+# Legger til et komma så man kan bruke flyttall
 def button_comma():
     number = e.get()
-    e.insert(0, number + ",")
+    e.insert(0, number + int(","))
+
+def first_parentheses():
+    return
+
+def second_parentheses():
+    return
+
+# Gjør inputet tall negativt
+def button_negative():
+    number = e.get()
+    e.delete(0, END)
+    number = int(number)
+    e.insert(0, (number * -1))
 
 
 # Definer knapper
-# TODO: Prøv en løkke i stedet
 
 button_1 = Button(root, text="1", padx=40, pady=20, command=lambda: button_click(1))
 button_2 = Button(root, text="2", padx=40, pady=20, command=lambda: button_click(2))
@@ -98,17 +121,21 @@ button_8 = Button(root, text="8", padx=40, pady=20, command=lambda: button_click
 button_9 = Button(root, text="9", padx=40, pady=20, command=lambda: button_click(9))
 button_0 = Button(root, text="0", padx=40, pady=20, command=lambda: button_click(0))
 
-button_equal = Button(root, text="=", padx=87, pady=20, command=button_equal)
+button_equal = Button(root, text="=", padx=88, pady=20, command=button_equal)
 button_clear = Button(root, text="clear", padx=79, pady=20, command=button_clear)
-button_comma = Button(root, text=", ", padx=48, pady=20, command=button_clear)
+button_comma = Button(root, text=", ", padx=53, pady=20, command=button_clear)
+button_negative = Button(root, text="(-)", padx=50, pady=20, command=button_negative)
+
+button_first_parentheses = Button(root, text="(", padx=55, pady=20, command=first_parentheses)
+button_second_parentheses = Button(root, text=")", padx=55, pady=20, command=second_parentheses)
 
 button_subtract = Button(root, text="-", padx=41, pady=20, command=button_subtract)
 button_multiply = Button(root, text="*", padx=41, pady=20, command=button_multiply)
-button_divide = Button(root, text="/", padx=40, pady=20, command=button_divide)
+button_divide = Button(root, text="/", padx=41, pady=20, command=button_divide)
 button_add = Button(root, text="+", padx=39, pady=20, command=button_add)
 
 button_square_root = Button(root, text="square root", padx=21, pady=20, command=button_square_root)
-button_ten_raised_to = Button(root, text="10^x", padx=38, pady=20, command=button_ten_raised_to)
+button_ten_raised_to = Button(root, text="10^x", padx=40, pady=20, command=button_ten_raised_to)
 
 # Sett knappene på skjermen
 
@@ -128,6 +155,9 @@ button_0.grid(row=4, column=0)
 button_clear.grid(row=6, column=1, columnspan=2)
 button_equal.grid(row=4, column=1, columnspan=2)
 button_comma.grid(row=3, column=3)
+button_first_parentheses.grid(row=4, column=3)
+button_second_parentheses.grid(row=5, column=3)
+button_negative.grid(row=6, column=3)
 
 button_add.grid(row=5, column=0)
 button_subtract.grid(row=5, column=1)
