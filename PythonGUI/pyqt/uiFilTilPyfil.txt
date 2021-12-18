@@ -1,0 +1,2 @@
+Kjøre denne kommandoen for å gjøre en .ui fil til .py
+pyuic5 -x filnavn.ui -o filnavn.py
