@@ -1,2 +1,2 @@
 # divPythonProgram
-En (planlagt) samling med programmer skrevet i Python
+En samling med programmer skrevet i Python
