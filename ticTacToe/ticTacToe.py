@@ -12,6 +12,9 @@ class UI(QMainWindow):
         # Track whose turn it is
         self.counter = 0
 
+        # Track which turn it is
+        self.turn = 0
+
         # Define widgets
         # Button widgets
         self.button1 = self.findChild(QPushButton, "button_00")
@@ -75,6 +78,9 @@ class UI(QMainWindow):
         # Check if a player has won
         self.checkIfWon()
 
+        # Check to see if it's a draw
+        self.checkIfFull()
+
         # Increment counter
         self.counter += 1
 
@@ -99,8 +105,9 @@ class UI(QMainWindow):
             # Reset the color of the buttons
             button.setStyleSheet('QPushButton  {color: #797979;}')
 
-        # Reset counter
+        # Reset counter and tracker
         self.counter = 0
+        self.turn = 0
 
     # Check if a player has won on their turn
     def checkIfWon(self):
@@ -143,12 +150,33 @@ class UI(QMainWindow):
         a.setStyleSheet('QPushButton  {color: red;}')
         b.setStyleSheet('QPushButton  {color: red;}')
         c.setStyleSheet('QPushButton  {color: red;}')
-        self.labelTurn.setText(f"{a.text()} has won!")
+        self.labelTurn.setText(f"{a.text()} Has Won!")
 
         # Disable the board
         self.disable()
 
         self.winPopup()
+
+    # Check to see if the board is full without a winner
+    def checkIfFull(self):
+        self.turn += 1
+        if self.turn == 9:
+            self.labelTurn.setText("It is a tie")
+            self.disable()
+            self.drawPopup()
+
+    # Popup for draws
+    def drawPopup(self):
+        msg = QMessageBox()
+        msg.setText("The game is a tie")
+        msg.setWindowTitle("The game is a tie")
+        msg.setInformativeText('Play again?')
+        msg.setIcon(QMessageBox.Information)
+        msg.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+        msg.setDefaultButton(QMessageBox.Yes)
+        msg.buttonClicked.connect(self.popup_button)
+
+        x = msg.exec_()
 
     # Disable all the buttons in the grid when a player wins
     def disable(self):
