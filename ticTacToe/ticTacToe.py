@@ -15,6 +15,11 @@ class UI(QMainWindow):
         # Track which turn it is
         self.turn = 0
 
+        # Track stats
+        self.numberOfXWins = 0
+        self.numberOfOWins = 0
+        self.numberOfDraws = 0
+
         # Define widgets
         # Button widgets
         self.button1 = self.findChild(QPushButton, "button_00")
@@ -32,7 +37,7 @@ class UI(QMainWindow):
         self.play_vs_computer.triggered.connect(self.vsComputer)
 
         # Reset statistics action and quit action
-        self.buttonNewGameVsPlayer = self.findChild(QAction, "buttonReset_Statistics")
+        self.buttonReset_Statistics.triggered.connect(self.ResetStats)
         self.buttonQuit = self.findChild(QAction, "buttonQuit")
 
         # Label widgets
@@ -152,6 +157,13 @@ class UI(QMainWindow):
         c.setStyleSheet('QPushButton  {color: red;}')
         self.labelTurn.setText(f"{a.text()} Has Won!")
 
+        if(a.text() == 'X'):
+            self.numberOfXWins += 1
+            self.labelxWins.setText(f"X: {self.numberOfXWins}")
+        else:
+            self.numberOfOWins += 1
+            self.labeloWins.setText(f"O: {self.numberOfOWins}")
+
         # Disable the board
         self.disable()
 
@@ -164,6 +176,8 @@ class UI(QMainWindow):
             self.labelTurn.setText("It is a tie")
             self.disable()
             self.drawPopup()
+            self.numberOfDraws += 1
+            self.labelTies.setText(f"Draws: {self.numberOfDraws}")
 
     # Popup for draws
     def drawPopup(self):
@@ -221,7 +235,16 @@ class UI(QMainWindow):
         else:
             sys.exit()
 
-    
+    # Let user reset statistics
+    def ResetStats(self):
+        self.numberOfXWins = 0
+        self.labelxWins.setText(f"X: {self.numberOfXWins}")
+        self.numberOfOWins = 0
+        self.labeloWins.setText(f"O: {self.numberOfOWins}")
+        self.numberOfDraws = 0
+        self.labelTies.setText(f"Draws: {self.numberOfDraws}")
+
+
     def vsPlayer(self):
         self.resetBoard()
         self.whoStarts()
