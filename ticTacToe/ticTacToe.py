@@ -1,3 +1,4 @@
+from typing import Counter
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QLabel, QAction, QMessageBox
 from PyQt5 import uic
 import sys, random
@@ -11,14 +12,13 @@ class UI(QMainWindow):
 
         # Track whose turn it is
         self.counter = 0
+        self.whoseTurn = 'X'
 
         # Track which turn it is
         self.turn = 0
 
         # Track stats
-        self.numberOfXWins = 0
-        self.numberOfOWins = 0
-        self.numberOfDraws = 0
+        self.numberOfXWins = self.numberOfOWins = self.numberOfDraws0 = 0
 
         # Define widgets
         # Button widgets
@@ -32,13 +32,9 @@ class UI(QMainWindow):
         self.button8 = self.findChild(QPushButton, "button_21")
         self.button9 = self.findChild(QPushButton, "button_22")
 
-        # New game actions (not buttons)
-        self.play_vs_player.triggered.connect(self.vsPlayer)
-        self.play_vs_computer.triggered.connect(self.vsComputer)
-
         # Reset statistics action and quit action
-        self.buttonReset_Statistics.triggered.connect(self.ResetStats)
-        self.buttonQuit = self.findChild(QAction, "buttonQuit")
+        self.buttonReset_Statistics.triggered.connect(self.resetStats)
+        self.buttonQuit.triggered.connect(self.quit)
 
         # Label widgets
         self.labelTurn = self.findChild(QLabel, "labelWhoseTurn")
@@ -59,25 +55,14 @@ class UI(QMainWindow):
 
         self.show()
 
-    # Randomly pick if X or O starts
-    def whoStarts(self):
-        num = random.randint(1, 3)
-        if num == 1:
-            self.labelTurn.setText("Player: X")
-        else:
-            self.labelTurn.setText("Player: O")
-            self.counter += 1
-
     # Click on button to set symbol
     def clicker(self, b):
-        if self.counter % 2 == 0:
-            whoseTurn = "X"
+        if self.whoseTurn == 'X':
             self.labelTurn.setText("Player: O")
         else:
-            whoseTurn = "O"
             self.labelTurn.setText("Player: X")
         
-        b.setText(whoseTurn)
+        b.setText(self.whoseTurn)
         b.setEnabled(False)
 
         # Check if a player has won
@@ -88,6 +73,13 @@ class UI(QMainWindow):
 
         # Increment counter
         self.counter += 1
+        self.swapPlayer()
+
+    def swapPlayer(self):
+        if self.counter % 2 == 0:
+            self.whoseTurn = 'X'
+        else:
+            self.whoseTurn = 'O'
 
     # Reset board if wants to play again
     def resetBoard(self):
@@ -116,36 +108,31 @@ class UI(QMainWindow):
 
     # Check if a player has won on their turn
     def checkIfWon(self):
-        if self.counter % 2 == 0:
-            whoseTurn = "X"
-        else:
-            whoseTurn = "O"
-        
         # Across
-        if self.button1.text() == self.button2.text() == self.button3.text() == whoseTurn:
+        if self.button1.text() == self.button2.text() == self.button3.text() == self.whoseTurn:
             self.hasWon(self.button1, self.button2, self.button3)
 
-        if self.button4.text() == self.button5.text() == self.button6.text() == whoseTurn:
+        if self.button4.text() == self.button5.text() == self.button6.text() == self.whoseTurn:
             self.hasWon(self.button4, self.button5, self.button6)
 
-        if self.button7.text() == self.button8.text() == self.button9.text() == whoseTurn:
+        if self.button7.text() == self.button8.text() == self.button9.text() == self.whoseTurn:
             self.hasWon(self.button7, self.button8, self.button9)
 
         # Down
-        if self.button1.text() == self.button4.text() == self.button7.text() == whoseTurn:
+        if self.button1.text() == self.button4.text() == self.button7.text() == self.whoseTurn:
             self.hasWon(self.button1, self.button4, self.button7)
 
-        if self.button2.text() == self.button5.text() == self.button8.text() == whoseTurn:
+        if self.button2.text() == self.button5.text() == self.button8.text() == self.whoseTurn:
             self.hasWon(self.button2, self.button5, self.button8)
 
-        if self.button3.text() == self.button6.text() == self.button9.text() == whoseTurn:
+        if self.button3.text() == self.button6.text() == self.button9.text() == self.whoseTurn:
             self.hasWon(self.button3, self.button6, self.button9)
 
         # Diagonals
-        if self.button1.text() == self.button5.text() == self.button9.text() == whoseTurn:
+        if self.button1.text() == self.button5.text() == self.button9.text() == self.whoseTurn:
             self.hasWon(self.button1, self.button5, self.button9)
 
-        if self.button3.text() == self.button5.text() == self.button7.text() == whoseTurn:
+        if self.button3.text() == self.button5.text() == self.button7.text() == self.whoseTurn:
             self.hasWon(self.button3, self.button5, self.button7)
 
        
@@ -212,11 +199,7 @@ class UI(QMainWindow):
     # Popup message that pops up when a player wins
     def winPopup(self):
         msg = QMessageBox()
-        if self.counter % 2 == 0:
-            whoseTurn = "X"
-        else:
-            whoseTurn = "O"
-        msg.setText(f"{whoseTurn} has won!")
+        msg.setText(f"{self.whoseTurn} has won!")
         msg.setWindowTitle("We have a winner!")
         msg.setInformativeText('Play again?')
         msg.setIcon(QMessageBox.Information)
@@ -230,13 +213,17 @@ class UI(QMainWindow):
     # Let user respond to popup message
     def popup_button(self, response):
         if response.text() == "&Yes":
+            if self.whoseTurn == 'O':
+                self.swapPlayer()
+            else:
+                pass
             self.resetBoard()
-            self.whoStarts()
+            self.labelTurn.setText(f"Player: X")
         else:
             sys.exit()
 
     # Let user reset statistics
-    def ResetStats(self):
+    def resetStats(self):
         self.numberOfXWins = 0
         self.labelxWins.setText(f"X: {self.numberOfXWins}")
         self.numberOfOWins = 0
@@ -244,14 +231,9 @@ class UI(QMainWindow):
         self.numberOfDraws = 0
         self.labelTies.setText(f"Draws: {self.numberOfDraws}")
 
-
-    def vsPlayer(self):
-        self.resetBoard()
-        self.whoStarts()
-
-    def vsComputer(self):
-        self.resetBoard()
-        self.whoStarts()
+    # Let user quit the game from 
+    def quit(self):
+        sys.exit()
         
 
 # Initialize the application
