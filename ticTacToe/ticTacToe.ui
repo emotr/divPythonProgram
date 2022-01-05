@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>TicTacToe</string>
   </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Triangular</enum>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="labelWhoseTurn">
     <property name="geometry">
@@ -32,7 +35,7 @@
      <string>Show whose turn it is</string>
     </property>
     <property name="text">
-     <string>Player: </string>
+     <string>Player: X</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_wins">
@@ -74,7 +77,7 @@
      <string>Wins by X</string>
     </property>
     <property name="text">
-     <string>X:</string>
+     <string>X: 0</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_oWins">
@@ -95,14 +98,14 @@
      <string>Wins by O</string>
     </property>
     <property name="text">
-     <string>O:</string>
+     <string>O: 0</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_Ties">
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>290</y>
+      <y>280</y>
       <width>171</width>
       <height>61</height>
      </rect>
@@ -116,7 +119,7 @@
      <string>Number of ties</string>
     </property>
     <property name="text">
-     <string>Ties:</string>
+     <string>Draws: 0</string>
     </property>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget">
@@ -418,17 +421,6 @@
     <property name="title">
      <string>Game</string>
     </property>
-    <widget class="QMenu" name="menuNew_Game">
-     <property name="statusTip">
-      <string>Start a new game</string>
-     </property>
-     <property name="title">
-      <string>New Game</string>
-     </property>
-     <addaction name="play_vs_player"/>
-     <addaction name="play_vs_computer"/>
-    </widget>
-    <addaction name="menuNew_Game"/>
     <addaction name="buttonReset_Statistics"/>
     <addaction name="separator"/>
     <addaction name="buttonQuit"/>
