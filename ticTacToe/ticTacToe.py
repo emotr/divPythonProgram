@@ -120,27 +120,27 @@ class UI(QMainWindow):
         if self.button1.text() == self.button2.text() == self.button3.text() == whoseTurn:
             self.hasWon(self.button1, self.button2, self.button3)
 
-        if self.button4.text() == self.button5.text() == self.button6.text() == whoseTurn:
+        elif self.button4.text() == self.button5.text() == self.button6.text() == whoseTurn:
             self.hasWon(self.button4, self.button5, self.button6)
 
-        if self.button7.text() == self.button8.text() == self.button9.text() == whoseTurn:
+        elif self.button7.text() == self.button8.text() == self.button9.text() == whoseTurn:
             self.hasWon(self.button7, self.button8, self.button9)
 
         # Down
-        if self.button1.text() == self.button4.text() == self.button7.text() == whoseTurn:
+        elif self.button1.text() == self.button4.text() == self.button7.text() == whoseTurn:
             self.hasWon(self.button1, self.button4, self.button7)
 
-        if self.button2.text() == self.button5.text() == self.button8.text() == whoseTurn:
+        elif self.button2.text() == self.button5.text() == self.button8.text() == whoseTurn:
             self.hasWon(self.button2, self.button5, self.button8)
 
-        if self.button3.text() == self.button6.text() == self.button9.text() == whoseTurn:
+        elif self.button3.text() == self.button6.text() == self.button9.text() == whoseTurn:
             self.hasWon(self.button3, self.button6, self.button9)
 
         # Diagonals
-        if self.button1.text() == self.button5.text() == self.button9.text() == whoseTurn:
+        elif self.button1.text() == self.button5.text() == self.button9.text() == whoseTurn:
             self.hasWon(self.button1, self.button5, self.button9)
 
-        if self.button3.text() == self.button5.text() == self.button7.text() == whoseTurn:
+        elif self.button3.text() == self.button5.text() == self.button7.text() == whoseTurn:
             self.hasWon(self.button3, self.button5, self.button7)
 
        
