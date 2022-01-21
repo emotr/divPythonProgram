@@ -32,6 +32,8 @@ def main():
 
     clock = p.time.Clock()
     gs = chess_engine.GameState()
+    validMoves = gs.getValidMoves()
+    moveMade = False # Flaggvariabel når et trekk utføres
     load_images() # Bare gjøre dette en gang, før while løkka
     
     running = True
@@ -56,7 +58,9 @@ def main():
                 if len(playerClick) == 2: # Etter andre trykk
                     move = chess_engine.Move(playerClick[0], playerClick[1], gs.board)
                     print(move.getChessNotation())
-                    gs.makeMove(move)
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
                     sqSelected = () # Reset spillertrykk
                     playerClick = [] 
 
@@ -64,6 +68,11 @@ def main():
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z: # Angre når bruker trykker på 'z'
                     gs.undoMove()
+                    moveMade = True
+
+        if moveMade:
+            validMoves = gs.getValidMoves()
+            moveMade = False
 
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)

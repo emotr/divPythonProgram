@@ -12,11 +12,15 @@ class GameState():
             ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
             ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "wN", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "wR", "--", "--", "bB", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]]
+
+        self.moveFunction = {
+            'p': self.getPawnMoves, 'R': self.getRookMoves, 'N': self.getKnightMoves,
+            'B': self.getBishopMoves, 'Q': self.getQueenMoves, 'K': self.getKingMoves}
         
         self.whiteToMove = True
         self.moveLog = []
@@ -46,6 +50,96 @@ class GameState():
             self.whiteToMove = not self.whiteToMove # Bytte spiller tilbake
 
 
+    '''
+    Alle trekk som inneholder å sette konge i sjakk
+    '''
+    def getValidMoves(self):
+        return self.getAllPossibleMoves() # Ikke bekymret om sjakk nå
+
+
+    '''
+    Alle trekk uten å inneholde å sette kongen i sjakk
+    '''
+    def getAllPossibleMoves(self):
+        moves = []
+        for row in range(len(self.board)):
+            for col in range(len(self.board[row])):
+                turn = self.board[row][col][0] # Se på farge på brikke på en rute
+                if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
+                    piece = self.board[row][col][1] # Se på type på brikke på en rute
+                    self.moveFunction[piece](row, col, moves) # Kall riktig bevegelsesfunksjon
+    
+        return moves
+
+
+    '''
+    Finn alle mulige trekk til bond på rad og kolonne og legg de til listen
+    Tar ikke hensyn til en-passant eller forfremmelse
+    '''
+    def getPawnMoves(self, row, col, moves):
+        if self.whiteToMove: # Hvit trekk
+            if self.board[row - 1][col] == "--": # En rute bevegelse. -1 siden hvit bonde beveger seg oppover
+                moves.append(Move((row, col), (row - 1, col), self.board))
+                if row == 6 and self.board[row - 2][col] == "--": # Hvis bonden er på sin original posisjon og kan bevege seg to ruter
+                    moves.append(Move((row, col), (row - 2, col), self.board))
+            if col - 1 >= 0: # Ta brikke mot venstre. Passe på at bonden ikke går utenfor brettet
+                if self.board[row - 1][col - 1][0] == 'b': # Motstanders brikke kan tas
+                    moves.append(Move((row, col), (row - 1, col - 1), self.board))
+            if col + 1 <= 7: # Ta brikke mot høyre
+                if self.board[row - 1][col + 1][0] == 'b': # Motstanders brikke kan tas
+                    moves.append(Move((row, col), (row - 1, col + 1), self.board))
+        else: # Svart trekk
+            if self.board[row + 1][col] == "--": # En rute bevegelse. +1 siden svart bonde beveger seg nedover
+                moves.append(Move((row, col), (row + 1, col), self.board))
+                if row == 1 and self.board[row + 2][col] == "--": # Hvis bonden er på sin original posisjon og kan bevege seg to ruter
+                    moves.append(Move((row, col), (row + 2, col), self.board))
+            if col - 1 >= 0: # Ta brikke mot venstre. Passe på at bonden ikke går utenfor brettet
+                if self.board[row + 1][col -1][0] == 'w': # Motstanders brikke kan tas
+                    moves.append(Move((row, col), (row + 1, col - 1), self.board))
+            if col + 1 <= 7: # Ta brikke mot høyre
+                if self.board[row + 1][col + 1][0] == 'w': # Motstanders brikke kan tas
+                    moves.append(Move((row, col), (row + 1, col + 1), self.board))
+
+    '''
+    Finn alle mulige trekk til tårn på rad og kolonne og legg de til listen
+    '''
+    def getRookMoves(self, row, col, moves):
+        if self.whiteToMove: # Hvit trekk
+            while self.board[row][col] != "--":
+                pass
+
+        else: # Svart trekk
+            pass
+
+
+    '''
+    Finn alle mulige trekk til løper på rad og kolonne og legg de til listen
+    '''
+    def getBishopMoves(self, row, col, moves):
+        pass
+
+
+    '''
+    Finn alle mulige trekk til springer på rad og kolonne og legg de til listen
+    '''
+    def getKnightMoves(self, row, col, moves):
+        pass
+
+
+    '''
+    Finn alle mulige trekk til dronning på rad og kolonne og legg de til listen
+    '''
+    def getQueenMoves(self, row, col, moves):
+        pass
+
+
+    '''
+    Finn alle mulige trekk til konge på rad og kolonne og legg de til listen
+    '''
+    def getKingMoves(self, row, col, moves):
+        pass
+
+
 class Move():
     # Map nøkler til verdier for å kunne bruke sjakknotasjon
     # nøkkel : verdi
@@ -61,7 +155,16 @@ class Move():
         self.endCol = endSq[1]
         self.pieceMove = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
+        self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
 
+
+    '''
+    Override equals metoden 
+    '''
+    def __eq__(self, other):
+        if isinstance(other, Move):
+            return self.moveID == other.moveID
+        return False
 
     '''
     Skriver ut hvilket trekk som gjøres
