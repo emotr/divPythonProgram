@@ -21,6 +21,10 @@ class GameState():
         self.whiteToMove = True
         self.moveLog = []
 
+
+    '''
+    Tar et trekk som parameter og utfører det. Funker ikke for rokade, en-passant eller forfremmelse
+    '''
     def makeMove(self, move):
         if self.board[move.startRow][move.startCol] == "--":
             return None # Ikke gjør noe hvis første rute trykt på er tom
@@ -29,6 +33,9 @@ class GameState():
             self.board[move.endRow][move.endCol] = move.pieceMove
             self.moveLog.append(move) # Loggfør trekk for å kunne angre trekk eller vise trekkhistorie
             self.whiteToMove = not self.whiteToMove # Bytte spiller
+
+    
+    
 
 
 class Move():
