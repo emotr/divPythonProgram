@@ -35,7 +35,15 @@ class GameState():
             self.whiteToMove = not self.whiteToMove # Bytte spiller
 
     
-    
+    '''
+    Lar bruker angre tidligere trekk
+    '''
+    def undoMove(self):
+        if len(self.moveLog) != 0: # Må ha blitt gjort et trekk før man kan angre
+            move = self.moveLog.pop() # Fjerner siste element lagt til i moveLog
+            self.board[move.startRow][move.startCol] = move.pieceMove # Sette tilbake til tidligere plass
+            self.board[move.endRow][move.endCol] = move.pieceCaptured # Sette mulige tatte brikker tilbake
+            self.whiteToMove = not self.whiteToMove # Bytte spiller tilbake
 
 
 class Move():
