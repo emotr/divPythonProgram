@@ -41,6 +41,8 @@ def main():
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+                
+            # Peker håndtering
             elif e.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos() # (x, y) lokasjon til peker
                 col = location[0]//SQ_SIZE
@@ -57,6 +59,11 @@ def main():
                     gs.makeMove(move)
                     sqSelected = () # Reset spillertrykk
                     playerClick = [] 
+
+            # Tastatur håndtering
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_z: # Angre når bruker trykker på 'z'
+                    gs.undoMove()
 
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
