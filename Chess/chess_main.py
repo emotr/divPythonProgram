@@ -34,7 +34,7 @@ def main():
     gs = chess_engine.GameState()
     validMoves = gs.getValidMoves()
     moveMade = False # Flaggvariabel når et trekk utføres
-    load_images() # Bare gjøre dette en gang, før while løkka
+    load_images() # Bare gjøre dette en gang før while løkka
     
     running = True
     sqSelected = () # Ingen rute er valgt til å begynne med, holde følge med hvilken rute som er valgt (tuple: rad, kolonne)

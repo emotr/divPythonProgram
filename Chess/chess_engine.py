@@ -12,8 +12,8 @@ class GameState():
             ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
             ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "wN", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "wR", "--", "--", "bB", "--", "--"],
+            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "wB", "--", "--", "bB", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]]
@@ -104,12 +104,23 @@ class GameState():
     Finn alle mulige trekk til tårn på rad og kolonne og legg de til listen
     '''
     def getRookMoves(self, row, col, moves):
-        if self.whiteToMove: # Hvit trekk
-            while self.board[row][col] != "--":
-                pass
-
-        else: # Svart trekk
-            pass
+        directions = ((-1, 0), (0, -1), (1, 0), (0, 1)) # Opp, venstre, ned, høyre
+        enemyColor = 'b' if self.whiteToMove else 'w'
+        for direction in directions:
+            for i in range(1, 8):
+                endRow = row + direction[0] * i
+                endCol = col + direction[1] * i
+                if 0 <= endRow < 8 and 0 <= endCol < 8: # Holde seg innenfor brettet
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == "--": # Legg til alle mulige plasser som er ledige til moves
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor: # Legg til plass med motstanders brikke, må stoppe på den ruta
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                        break
+                    else: # Vennlig brikke på plass
+                        break
+                else: # Holde seg på brettet
+                    break
 
 
     '''
