@@ -13,7 +13,7 @@ class GameState():
             ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
-            ["--", "--", "wB", "--", "--", "bB", "--", "--"],
+            ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]]
@@ -48,6 +48,8 @@ class GameState():
             self.board[move.startRow][move.startCol] = move.pieceMove # Sette tilbake til tidligere plass
             self.board[move.endRow][move.endCol] = move.pieceCaptured # Sette mulige tatte brikker tilbake
             self.whiteToMove = not self.whiteToMove # Bytte spiller tilbake
+        else:
+            print('Må ha blitt gjort et trekk først')
 
 
     '''
@@ -68,7 +70,7 @@ class GameState():
                 if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[row][col][1] # Se på type på brikke på en rute
                     self.moveFunction[piece](row, col, moves) # Kall riktig bevegelsesfunksjon
-    
+
         return moves
 
 
@@ -152,21 +154,53 @@ class GameState():
     Finn alle mulige trekk til springer på rad og kolonne og legg de til listen
     '''
     def getKnightMoves(self, row, col, moves):
-        pass
+        movement = ((-2, -1), (-2, 1), (-1, -2), (-1, 2), (2, -1), (2, 1), (1, -2), (1, 2)) # Hopper i en L
+        allyColor = 'w' if self.whiteToMove else 'b'
+        for squares in movement:
+            endRow = row + squares[0]
+            endCol = col + squares[1]
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+                if endPiece[0] != allyColor: # Tom plass eller motstanders brikke på plass
+                    moves.append(Move((row, col), (endRow, endCol), self.board))
 
 
     '''
     Finn alle mulige trekk til dronning på rad og kolonne og legg de til listen
     '''
     def getQueenMoves(self, row, col, moves):
-        pass
+        directions = ((-1, 0), (0, -1), (1, 0), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)) # Kan gå i alle retninger
+        enemyColor = 'b' if self.whiteToMove else 'w'
+        for direction in directions:
+            for i in range(1, 8):
+                endRow = row + direction[0] * i
+                endCol = col + direction[1] * i
+                if 0 <= endRow < 8 and 0 <= endCol < 8: # Holde seg innenfor brettet
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == "--": # Legg til alle mulige plasser som er ledige til moves
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor: # Legg til plass med motstanders brikke, må stoppe på den ruta
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                        break
+                    else: # Vennlig brikke på plass
+                        break
+                else: # Holde seg på brettet
+                    break
 
 
     '''
     Finn alle mulige trekk til konge på rad og kolonne og legg de til listen
     '''
     def getKingMoves(self, row, col, moves):
-        pass
+        directions = ((-1, 0), (0, -1), (1, 0), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)) # Samme som dronning
+        allyColor = 'w' if self.whiteToMove else 'b'
+        for squares in directions: # Kan kun bevege seg en rute om gangen
+            endRow = row + squares[0]
+            endCol = col + squares[1]
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+                if endPiece[0] != allyColor: # Tom plass eller motstanders brikke på plass
+                    moves.append(Move((row, col), (endRow, endCol), self.board))
 
 
 class Move():
