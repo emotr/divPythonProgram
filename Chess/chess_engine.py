@@ -169,23 +169,9 @@ class GameState():
     Finn alle mulige trekk til dronning på rad og kolonne og legg de til listen
     '''
     def getQueenMoves(self, row, col, moves):
-        directions = ((-1, 0), (0, -1), (1, 0), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)) # Kan gå i alle retninger
-        enemyColor = 'b' if self.whiteToMove else 'w'
-        for direction in directions:
-            for i in range(1, 8):
-                endRow = row + direction[0] * i
-                endCol = col + direction[1] * i
-                if 0 <= endRow < 8 and 0 <= endCol < 8: # Holde seg innenfor brettet
-                    endPiece = self.board[endRow][endCol]
-                    if endPiece == "--": # Legg til alle mulige plasser som er ledige til moves
-                        moves.append(Move((row, col), (endRow, endCol), self.board))
-                    elif endPiece[0] == enemyColor: # Legg til plass med motstanders brikke, må stoppe på den ruta
-                        moves.append(Move((row, col), (endRow, endCol), self.board))
-                        break
-                    else: # Vennlig brikke på plass
-                        break
-                else: # Holde seg på brettet
-                    break
+        # En dronning er løper og tårn kombinert
+        self.getBishopMoves(row, col, moves)
+        self.getRookMoves(row, col, moves)
 
 
     '''
