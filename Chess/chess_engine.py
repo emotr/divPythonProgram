@@ -7,7 +7,7 @@ import boards
 
 class GameState():
     def __init__(self):
-        self.board = boards.normal # Last inn et brett fra Boards
+        self.board = boards.patt # Last inn et brett fra Boards
 
         self.moveFunction = {
             'p': self.getPawnMoves, 'R': self.getRookMoves, 'N': self.getKnightMoves,
