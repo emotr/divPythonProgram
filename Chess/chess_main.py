@@ -28,7 +28,7 @@ Main driver kode. Håndtere brukerinput og oppdatere grafikk
 def main():
     p.init()
     screen = p.display.set_mode((WIDTH, HEIGHT))
-    start_screen_settings(screen)
+    startScreenSettings(screen)
 
     clock = p.time.Clock()
     gs = chess_engine.GameState()
@@ -57,12 +57,14 @@ def main():
                     playerClick.append(sqSelected) # Legg til både første og andre trykk
                 if len(playerClick) == 2: # Etter andre trykk
                     move = chess_engine.Move(playerClick[0], playerClick[1], gs.board)
-                    print(move.getChessNotation())
                     if move in validMoves:
                         gs.makeMove(move)
                         moveMade = True
-                    sqSelected = () # Reset spillertrykk
-                    playerClick = [] 
+                        sqSelected = () # Reset spillertrykk
+                        playerClick = []
+                        print(move.getChessNotation())
+                    else:
+                        playerClick = [sqSelected] 
 
             # Tastatur håndtering
             elif e.type == p.KEYDOWN:
@@ -82,7 +84,7 @@ def main():
 '''
 Sett vindutittel, ikon og bakgrunnsfarge i vinduet
 '''
-def start_screen_settings(screen):
+def startScreenSettings(screen):
     p.display.set_caption("Chess")
     icon = p.image.load('pieces/wK.png')
     p.display.set_icon(icon)
